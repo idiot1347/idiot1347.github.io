@@ -1,2 +1,29 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+html {
+  background: $page-bg;
+
+  .collapse-sidebar aside.sidebar {
+    background: $nav-bg;
+  }
+}
+
+body {
+  // To allow right-clicking on a MathJax formula
+  // From http://luikore.github.io/2011/09/good-things-learned-from-octopress/
+  > div#main {
+    background: $sidebar-bg $noise-bg;
+  }
+
+  // On pages, we don't need a huge margin at the top
+  .page-content article header {
+    padding-top: 1em;
+  }
+
+  // The padding is unnecessary with the minimalist style
+  #content>div {
+    padding-top: 0;
+  }
+
+}
