@@ -6,4 +6,4 @@ layout: page
 ![](http://placekitten.com/500/250)
 
 ## Contact
-You can contact me at test@example.com.
+You can contact me at szk1347@163.com
