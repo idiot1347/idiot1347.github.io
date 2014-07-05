@@ -3,7 +3,7 @@ layout: post
 title: "LeetCode: Search Insert Position"
 date: 2014-07-06 00:12:00 +0800
 comments: true
-categories: Algorithm, LeetCode
+categories: Algorithm LeetCode
 ---
 
 ## 二分

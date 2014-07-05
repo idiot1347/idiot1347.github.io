@@ -3,7 +3,7 @@ layout: post
 title: "LeetCode: Sort List"
 date: 2014-07-05 23:45:49 +0800
 comments: true
-categories: Algorithm, LeetCode
+categories: Algorithm LeetCode
 ---
 
 
