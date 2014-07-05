@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Algorithm, | Lose yourself]]></title>
   <link href="http://idiot1347.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://idiot1347.github.io/"/>
-  <updated>2014-07-06T00:02:02+08:00</updated>
+  <updated>2014-07-06T00:17:28+08:00</updated>
   <id>http://idiot1347.github.io/</id>
   <author>
     <name><![CDATA[szk1347]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[LeetCode: Search Insert Position]]></title>
+    <link href="http://idiot1347.github.io/blog/2014/07/06/leetcode-search-insert-position/"/>
+    <updated>2014-07-06T00:12:00+08:00</updated>
+    <id>http://idiot1347.github.io/blog/2014/07/06/leetcode-search-insert-position</id>
+    <content type="html"><![CDATA[<h2>二分</h2>
+
+<p>碰到的问题： 没有考虑到数组中所有数字都比 target 小</p>
+
+<p>代码
+```cpp
+class Solution {
+public:</p>
+
+<pre><code>int searchInsert(int A[], int n, int target) {
+    int low = 0, high = n - 1;
+    while (low &lt; high) {
+        int mid = (low + high) / 2;
+        if (A[mid] &lt; target)
+            low = mid + 1;
+        else
+            high = mid;
+    }
+    if (A[low] &gt;= target)
+        return low;
+    return low + 1;
+}
+</code></pre>
+
+<p>};
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[LeetCode: Sort List]]></title>
