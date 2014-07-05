@@ -9,7 +9,9 @@
   <meta name="author" content="szk1347">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts ">
+  <meta name="description" content="重学基本的算法，以前还是太不用心，太急躁了。 链表的快排 写了挺久，碰到的主要问题是： 分别排序两个子链表时没有把子链表的最后一个结点的 next 设为 NULL；
+链接左子链表，head，右子链表时检查 u 是否为 NULL；
+最坏时间复杂度：在划分时如果结点的值和 head &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -96,6 +98,192 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/05/leetcode-sort-list/">LeetCode: Sort List</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-05T23:45:49+08:00" pubdate data-updated="true">Jul 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>重学基本的算法，以前还是太不用心，太急躁了。</p>
+
+<h2>链表的快排</h2>
+
+<p>写了挺久，碰到的主要问题是：</p>
+
+<ol>
+<li>分别排序两个子链表时没有把子链表的最后一个结点的 next 设为 NULL；</li>
+<li>链接左子链表，head，右子链表时检查 u 是否为 NULL；</li>
+<li>最坏时间复杂度：在划分时如果结点的值和 head 的值相同就根据结点序号的奇偶性来决定放到左子链表还是右子链表中；</li>
+</ol>
+
+
+<p>上代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Definition for singly-linked list.</span>
+</span><span class='line'><span class="cm"> * struct ListNode {</span>
+</span><span class='line'><span class="cm"> *     int val;</span>
+</span><span class='line'><span class="cm"> *     ListNode *next;</span>
+</span><span class='line'><span class="cm"> *     ListNode(int x) : val(x), next(NULL) {}</span>
+</span><span class='line'><span class="cm"> * };</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>    <span class="n">ListNode</span> <span class="o">*</span><span class="n">sortList</span><span class="p">(</span><span class="n">ListNode</span> <span class="o">*</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//printf(&quot;%d\n&quot;, head);</span>
+</span><span class='line'>        <span class="c1">//if (head != NULL)</span>
+</span><span class='line'>            <span class="c1">//printf(&quot;%d %d\n&quot;, head-&gt;next, head-&gt;val);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">head</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="n">head</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">//printf(&quot;c\n&quot;);</span>
+</span><span class='line'>        <span class="n">ListNode</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">ListNode</span> <span class="o">*</span><span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">ListNode</span> <span class="o">*</span><span class="n">u</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">ListNode</span> <span class="o">*</span><span class="n">v</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">ListNode</span> <span class="o">*</span><span class="n">w</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">w</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">//printf(&quot;%d\n&quot;, w-&gt;val);</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span>  <span class="p">{</span>
+</span><span class='line'>                <span class="n">u</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">u</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">v</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                <span class="n">v</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="n">u</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">u</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="n">v</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                    <span class="n">v</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span><span class='line'>            <span class="o">++</span><span class="n">idx</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">u</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="c1">//orz</span>
+</span><span class='line'>        <span class="n">v</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="c1">//orz</span>
+</span><span class='line'>        <span class="n">u</span> <span class="o">=</span> <span class="n">sortList</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">v</span> <span class="o">=</span> <span class="n">sortList</span><span class="p">(</span><span class="n">q</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>            <span class="n">u</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">w</span> <span class="o">=</span> <span class="n">u</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">//printf(&quot;u%d v%d w%d\n&quot;, u, v, w);</span>
+</span><span class='line'>        <span class="c1">//printf(&quot;%d %d %d\n&quot;, u-&gt;next, v-&gt;next, w-&gt;next);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//printf(&quot;%d %d %d\n&quot;, w, w-&gt;next, w-&gt;next-&gt;next);</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">w</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span><span class='line'>            <span class="c1">//printf(&quot;%d\n&quot;, w);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="c1">//printf(&quot;abc\n&quot;);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">!=</span> <span class="n">head</span><span class="p">)</span> <span class="c1">//orz</span>
+</span><span class='line'>            <span class="n">w</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">delete</span> <span class="n">q</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">//printf(&quot;def\n&quot;);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">u</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
     
     <a href="/blog/archives">Blog Archives</a>
@@ -107,6 +295,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/05/leetcode-sort-list/">LeetCode: Sort List</a>
+      </li>
     
   </ul>
 </section>
