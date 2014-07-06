@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Algorithm | Lose yourself]]></title>
   <link href="http://idiot1347.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://idiot1347.github.io/"/>
-  <updated>2014-07-06T00:24:21+08:00</updated>
+  <updated>2014-07-06T12:04:31+08:00</updated>
   <id>http://idiot1347.github.io/</id>
   <author>
     <name><![CDATA[szk1347]]></name>
@@ -14,16 +14,74 @@
 
   
   <entry>
+    <title type="html"><![CDATA[LeetCode: Populating Next Right Pointers in Each Node]]></title>
+    <link href="http://idiot1347.github.io/blog/2014/07/06/leetcode-populating-next-right-pointers-in-each-node/"/>
+    <updated>2014-07-06T11:57:26+08:00</updated>
+    <id>http://idiot1347.github.io/blog/2014/07/06/leetcode-populating-next-right-pointers-in-each-node</id>
+    <content type="html"><![CDATA[<h2>思路</h2>
+
+<p>就是一层一层的遍历，同时维护一个指针标记当前访问的左边的结点，本想用 bfs 但要用队列，不满足常数空间复杂度的要求；这里隐式用到了栈，是不是也不满足要求？（待解决）</p>
+
+<p>碰到的问题：到达 max_depth 时忘了 return</p>
+
+<h2>代码</h2>
+
+<p>```cpp
+/<em><em>
+ * Definition for binary tree with next pointer.
+ * struct TreeLinkNode {
+ *  int val;
+ *  TreeLinkNode </em>left, </em>right, <em>next;
+ *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+ * };
+ </em>/
+class Solution {
+public:</p>
+
+<pre><code>void connect(TreeLinkNode *root) {
+    int height = 0;
+    TreeLinkNode *p = root;
+    while (p != NULL) {
+        ++height;
+        p = p-&gt;left;
+    }
+    for (int i = 1;i &lt;= height;++i) {
+        TreeLinkNode **p = new (TreeLinkNode *);
+        *p = NULL;
+        dfs(root, 0, i, p);
+    }
+}
+
+void dfs(TreeLinkNode *current, int depth, int max_depth, TreeLinkNode **ptr) {
+    if (depth == max_depth) {
+        if (*ptr != NULL) {
+            (*ptr)-&gt;next = current;
+        }
+        *ptr = current;
+        return;
+    }
+    dfs(current-&gt;left, depth + 1, max_depth, ptr);
+    dfs(current-&gt;right, depth + 1, max_depth, ptr);
+}
+</code></pre>
+
+<p>};
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[LeetCode: Search Insert Position]]></title>
     <link href="http://idiot1347.github.io/blog/2014/07/06/leetcode-search-insert-position/"/>
     <updated>2014-07-06T00:12:00+08:00</updated>
     <id>http://idiot1347.github.io/blog/2014/07/06/leetcode-search-insert-position</id>
-    <content type="html"><![CDATA[<h2>二分</h2>
+    <content type="html"><![CDATA[<h2>　二分</h2>
 
 <p>碰到的问题： 没有考虑到数组中所有数字都比 target 小</p>
 
-<p>代码
-```cpp
+<h2>　代码</h2>
+
+<p>```cpp
 class Solution {
 public:</p>
 
@@ -65,8 +123,9 @@ public:</p>
 </ol>
 
 
-<p>上代码
-```cpp
+<h2>代码</h2>
+
+<p>```cpp
 /<em><em>
  * Definition for singly-linked list.
  * struct ListNode {
