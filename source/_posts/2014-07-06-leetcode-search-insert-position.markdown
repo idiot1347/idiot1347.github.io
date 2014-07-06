@@ -6,10 +6,10 @@ comments: true
 categories: Algorithm LeetCode
 ---
 
-## 二分
+##　二分
 碰到的问题： 没有考虑到数组中所有数字都比 target 小
 
-代码
+##　代码
 ```cpp
 class Solution {
 public:

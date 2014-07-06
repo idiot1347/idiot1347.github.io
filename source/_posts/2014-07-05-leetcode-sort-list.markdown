@@ -16,7 +16,7 @@ categories: Algorithm LeetCode
 2. 链接左子链表，head，右子链表时检查 u 是否为 NULL；
 3. 最坏时间复杂度：在划分时如果结点的值和 head 的值相同就根据结点序号的奇偶性来决定放到左子链表还是右子链表中；
 
-上代码
+## 代码
 ```cpp
 /**
  * Definition for singly-linked list.
