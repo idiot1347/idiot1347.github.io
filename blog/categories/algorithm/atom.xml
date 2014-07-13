@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Algorithm | Lose yourself]]></title>
   <link href="http://idiot1347.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://idiot1347.github.io/"/>
-  <updated>2014-07-06T12:04:31+08:00</updated>
+  <updated>2014-07-13T19:46:14+08:00</updated>
   <id>http://idiot1347.github.io/</id>
   <author>
     <name><![CDATA[szk1347]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[LeetCode: Binary Tree Preorder Traversal]]></title>
+    <link href="http://idiot1347.github.io/blog/2014/07/13/leetcode-binary-tree-preorder-traversal/"/>
+    <updated>2014-07-13T19:41:58+08:00</updated>
+    <id>http://idiot1347.github.io/blog/2014/07/13/leetcode-binary-tree-preorder-traversal</id>
+    <content type="html"><![CDATA[<h2>思路</h2>
+
+<p>只是把隐式栈改成了显式栈罢了</p>
+
+<h2>代码</h2>
+
+<p>```cpp
+/<em><em>
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode </em>left;
+ *     TreeNode </em>right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:</p>
+
+<pre><code>vector&lt;int&gt; preorderTraversal(TreeNode *root) {
+    vector&lt;int&gt; ans;
+    if (root == NULL) return ans;
+    stack&lt;TreeNode *&gt; stk;
+    TreeNode *x = root;
+    while (true) {
+        ans.push_back(x-&gt;val);
+        if (x-&gt;left != NULL) {
+            if (x-&gt;right != NULL) {
+                stk.push(x-&gt;right);
+            }
+            x = x-&gt;left; // 先入栈，后修改x
+        } else if (x-&gt;right != NULL) {
+            x = x-&gt;right;
+        } else if (!stk.empty()) {
+            x = stk.top();
+            stk.pop();
+        } else {
+            break;
+        }
+    }
+    return ans;
+}
+</code></pre>
+
+<p>};
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[LeetCode: Populating Next Right Pointers in Each Node]]></title>
