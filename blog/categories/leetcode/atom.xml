@@ -4,7 +4,7 @@
   <title><![CDATA[Category: LeetCode | Lose yourself]]></title>
   <link href="http://idiot1347.github.io/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://idiot1347.github.io/"/>
-  <updated>2014-07-13T19:46:14+08:00</updated>
+  <updated>2014-07-13T20:57:18+08:00</updated>
   <id>http://idiot1347.github.io/</id>
   <author>
     <name><![CDATA[szk1347]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[LeetCode: Binary Tree Inorder Traversal]]></title>
+    <link href="http://idiot1347.github.io/blog/2014/07/13/leetcode-binary-tree-inorder-traversal/"/>
+    <updated>2014-07-13T20:55:23+08:00</updated>
+    <id>http://idiot1347.github.io/blog/2014/07/13/leetcode-binary-tree-inorder-traversal</id>
+    <content type="html"><![CDATA[<h2>思路</h2>
+
+<p>同样是用显式栈</p>
+
+<p>碰到的问题：不重复访问左子结点</p>
+
+<h2>代码</h2>
+
+<p>```cpp
+class Solution {
+public:</p>
+
+<pre><code>vector&lt;int&gt; inorderTraversal(TreeNode *root) {
+    vector&lt;int&gt; ans;
+    if (root == NULL) return ans;
+    TreeNode * stk[100];
+    int top = 0;
+    TreeNode *x = root;
+    while (true) {
+        if (x == NULL) {
+            if(top &gt; 0) {
+                x = stk[--top];
+                ans.push_back(x-&gt;val);
+                x = x-&gt;right;
+            } else {
+                break;
+            }
+        } else { 
+            //cout &lt;&lt; x-&gt;val &lt;&lt; endl;
+            if (x-&gt;left != NULL) {
+                stk[top++] = x;
+                assert (top &lt;= 100);
+                x = x-&gt;left;
+            } else {
+                ans.push_back(x-&gt;val);
+                x = x-&gt;right;
+            }
+        }
+    }
+    return ans;
+}
+</code></pre>
+
+<p>};
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[LeetCode: Binary Tree Preorder Traversal]]></title>
